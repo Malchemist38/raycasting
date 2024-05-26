@@ -1,0 +1,15 @@
+One thing that you might have noticed is that sometimes we are using this weird order of bytes when choosing our hexadecimal color values.
+
+Do you remember how we defined our SDL renderer to use a pixel format of RGBA32? But as you probably noticed, in some places we selected the color FFFF0000 for blue and FF0000FF for red. Why is that?
+
+The main reason for this flip is endianness. The endianness of a system dictates the order of our bytes in memory.
+
+In a big-endian system, the bytes are ordered from most significant to least significant. In a little-endian system, our bytes are ordered from least significant to most significant.
+
+This image shows how the value 01 23 45 67 is ordered in both big-endian and little-endian architectures.
+
+
+
+So, we told SDL to use a pixel format RGBA32 (where the red byte is the most significant one), but we are inputting our color bytes in little-endian order.
+
+And since we are simply casting the raw buffer of color bytes from the PNG input, we ended up with a flipped order of bytes. This is why FF000000 is alpha, FFFF0000 is blue, FF00FF00 is green, and FF0000FF is green.
